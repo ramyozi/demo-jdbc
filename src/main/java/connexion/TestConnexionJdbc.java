@@ -21,6 +21,8 @@ public class TestConnexionJdbc {
 
 			System.out.println(
 					"Connexion à la base de données bdd_test établie.");
+			
+			connexion.close();
 
 		} catch (SQLException e) {
 			System.err.println(
