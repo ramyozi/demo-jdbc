@@ -15,19 +15,23 @@ public class TestConnexionJdbc {
 
 		Connection connexion = null;
 
-		try {
-			connexion = DriverManager.getConnection(url, utilisateur,
-					motDePasse);
+		 try {
+	            connexion = DriverManager.getConnection(url, utilisateur, motDePasse);
 
-			System.out.println(
-					"Connexion à la base de données bdd_test établie.");
-			
-			connexion.close();
+	            System.out.println("Connexion à la base de données compta établie.");
+	            System.out.println("Connexion : " + connexion);
 
-		} catch (SQLException e) {
-			System.err.println(
-					"Erreur lors de la connexion à la base de données : "
-							+ e.getMessage());
-		}
+	        } catch (SQLException e) {
+	            System.err.println("Erreur lors de la connexion à la base de données : " + e.getMessage());
+	        } finally {
+	            if (connexion != null) {
+	                try {
+	                    connexion.close();
+	                    System.out.println("Connexion à la base de données bdd_test fermée.");
+	                } catch (SQLException e) {
+	                    System.err.println("Erreur lors de la fermeture de la connexion : " + e.getMessage());
+	                }
+	            }
+	        }
+	    }
 	}
-}
