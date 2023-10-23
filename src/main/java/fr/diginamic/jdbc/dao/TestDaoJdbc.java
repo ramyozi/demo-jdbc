@@ -1,35 +1,36 @@
 package fr.diginamic.jdbc.dao;
 
-import java.util.List;
-
+import fr.diginamic.jdbc.dao.FournisseurDaoJdbc;
 import fr.diginamic.jdbc.entites.Fournisseur;
+
+import java.util.List;
 
 public class TestDaoJdbc {
     public static void main(String[] args) {
         FournisseurDaoJdbc fournisseurDao = new FournisseurDaoJdbc();
 
-        // Insérer 
-        Fournisseur fournisseurAInserer = new Fournisseur(0, "France de matériaux");
+        // Insérer un fournisseur avec un ID spécifique
+        Fournisseur fournisseurAInserer = new Fournisseur(1, "France de matériaux");
         fournisseurDao.insert(fournisseurAInserer);
 
-        // Extraire et afficher 
+        // Extraire et afficher la liste des fournisseurs
         List<Fournisseur> fournisseurs = fournisseurDao.extraire();
         System.out.println("Liste des fournisseurs après insertion :");
         afficherFournisseurs(fournisseurs);
 
-        // Modifier 
+        // Modifier le fournisseur "France de matériaux" en "France matériaux"
         fournisseurDao.update("France de matériaux", "France matériaux");
 
-        // Extraire et afficher 
+        // Extraire et afficher la liste des fournisseurs après la modification
         fournisseurs = fournisseurDao.extraire();
         System.out.println("Liste des fournisseurs après modification :");
         afficherFournisseurs(fournisseurs);
 
-        // Supprimer 
-        Fournisseur fournisseurASupprimer = new Fournisseur(0, "France matériaux");
+        // Supprimer le fournisseur "France matériaux"
+        Fournisseur fournisseurASupprimer = new Fournisseur(1, "France matériaux");
         fournisseurDao.delete(fournisseurASupprimer);
 
-        // Extraire et afficher
+        // Extraire et afficher la liste des fournisseurs après la suppression
         fournisseurs = fournisseurDao.extraire();
         System.out.println("Liste des fournisseurs après suppression :");
         afficherFournisseurs(fournisseurs);

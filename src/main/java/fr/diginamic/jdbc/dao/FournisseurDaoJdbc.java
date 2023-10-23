@@ -1,20 +1,14 @@
 package fr.diginamic.jdbc.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import fr.diginamic.jdbc.entites.Fournisseur;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.diginamic.jdbc.entites.Fournisseur;
-
 public class FournisseurDaoJdbc implements FournisseurDao {
-    private String url = "jdbc:mysql://localhost:3306/compta";
-    private String utilisateur = "votreUtilisateur";
-    private String motDePasse = "votreMotDePasse";
+    private String url = "jdbc:mysql://localhost:3306/campta";
+    private String utilisateur = "root";
+    private String motDePasse = "";
 
     @Override
     public List<Fournisseur> extraire() {
@@ -41,9 +35,20 @@ public class FournisseurDaoJdbc implements FournisseurDao {
     @Override
     public void insert(Fournisseur fournisseur) {
         try (Connection connexion = DriverManager.getConnection(url, utilisateur, motDePasse);
-             PreparedStatement statement = connexion.prepareStatement("INSERT INTO fournisseur (NOM) VALUES (?)")) {
-            statement.setString(1, fournisseur.getNom());
-            statement.executeUpdate();
+             Statement lastIdStatement = connexion.createStatement();
+             PreparedStatement insertStatement = connexion.prepareStatement("INSERT INTO fournisseur (ID, NOM) VALUES (?, ?)")) {
+
+            // Trouver le dernier ID dans la table
+            ResultSet resultSet = lastIdStatement.executeQuery("SELECT MAX(ID) FROM fournisseur");
+            int lastId = 0;
+            if (resultSet.next()) {
+                lastId = resultSet.getInt(1);
+            }
+
+            // Utiliser ID + 1 pour l'insertion
+            insertStatement.setInt(1, lastId + 1);
+            insertStatement.setString(2, fournisseur.getNom());
+            insertStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -67,8 +72,9 @@ public class FournisseurDaoJdbc implements FournisseurDao {
     public boolean delete(Fournisseur fournisseur) {
         boolean deleted = false;
         try (Connection connexion = DriverManager.getConnection(url, utilisateur, motDePasse);
-             PreparedStatement statement = connexion.prepareStatement("DELETE FROM fournisseur WHERE ID = ?")) {
+             PreparedStatement statement = connexion.prepareStatement("DELETE FROM fournisseur WHERE ID = ? AND NOM = ?")) {
             statement.setInt(1, fournisseur.getId());
+            statement.setString(2, fournisseur.getNom());
             int rowCount = statement.executeUpdate();
             deleted = rowCount > 0;
         } catch (SQLException e) {
