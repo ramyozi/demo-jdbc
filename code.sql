@@ -1,0 +1,19 @@
+CREATE TABLE REGIONS (
+    id INT PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE DEPTS (
+    id INT PRIMARY KEY,
+    code VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE VILLES (
+    id INT PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL,
+    population INT,
+    idDept INT,
+    idRegion INT,
+    FOREIGN KEY (idDept) REFERENCES DEPTS(id),
+    FOREIGN KEY (idRegion) REFERENCES REGIONS(id)
+);
