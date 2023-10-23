@@ -12,8 +12,8 @@ CREATE TABLE VILLES (
     id INT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     population INT,
-    idDept INT,
-    idRegion INT,
+    idDept VARCHAR(10) NOT NULL,
+    idRegion VARCHAR(10) NOT NULL,
     FOREIGN KEY (idDept) REFERENCES DEPTS(id),
     FOREIGN KEY (idRegion) REFERENCES REGIONS(id)
 );
